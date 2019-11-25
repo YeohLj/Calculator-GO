@@ -17,10 +17,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Dev Test App"
-        android:onClick="openDevelopmentActivity"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

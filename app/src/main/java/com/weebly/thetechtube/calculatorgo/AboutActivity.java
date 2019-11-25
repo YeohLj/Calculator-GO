@@ -15,11 +15,4 @@ public class AboutActivity extends AppCompatActivity {
 
     }
 
-    public void openDevelopmentActivity(View view) {
-
-        Intent intent = new Intent(getApplicationContext(), DevelopmentActivity.class);
-        startActivity(intent);
-
-    }
-
 }

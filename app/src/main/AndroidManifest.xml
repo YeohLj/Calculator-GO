@@ -10,10 +10,6 @@
         android:supportsRtl="true"
         android:resizeableActivity="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DevelopmentActivity"
-            android:configChanges="screenLayout|smallestScreenSize|screenSize|orientation">
-
-        </activity>
         <activity android:name=".AboutActivity" />
         <activity android:name=".MainActivity"
             android:configChanges="screenLayout|smallestScreenSize|screenSize|orientation">
