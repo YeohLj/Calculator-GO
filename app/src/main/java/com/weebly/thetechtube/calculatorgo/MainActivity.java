@@ -79,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        int crazyNumber = 1 + 1;
 
         // We will be using findViewById to linked back the original
         // activity_main.xml views
