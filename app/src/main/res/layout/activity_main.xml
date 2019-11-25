@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright 2018 The Tech Tube
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+Our current website: https://thetechtube.weebly.com/
+
+-->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <!-- this is a comment -->
+    <!-- wrap_content is where the view is wrap around the content
+    and match_parent is where it extents to the edge of the device -->
+    <!-- layout_margin means the margin will be applied to four
+    sides unless you specify it. For example, layout_marginTop-->
+
+
+    <!-- TextView is been used for Clear Button so that it could
+     have a Text feel to it instead of a button-->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/buttonClear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="C"
+        android:paddingTop="20dp"
+        android:paddingBottom="25dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="20dp"
+        android:textSize="50sp"
+        android:textColor="#e4e40a"
+        android:textStyle="bold"
+        android:onClick="clear"/>
+
+    <!-- This TextView will be used to display info -->
+    <!-- Align viewEnd means it will align to the end of the view
+     which is the right side-->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/mainTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:paddingBottom="25dp"
+        android:layout_toRightOf="@+id/buttonClear"
+        android:layout_margin="5dp"
+        android:textSize="48sp"
+        android:textAlignment="viewEnd"
+        android:maxLines="3"
+        android:text=""/>
+
+    <!-- We will be using GridLayout to positioned our buttons-->
+    <!-- In GridLayout, you will need to specify how many rows
+     and columns there are and each buttons will have a rowCount and
+     columnCount value. More like a coordinate. The first row and
+     column will start with 0 -->
+    <GridLayout
+        android:id="@+id/gridLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/mainTextView"
+        android:layout_marginTop="10dp"
+        android:columnCount="4"
+        android:rowCount="5">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_rowWeight="1"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:onClick="clickButton"
+            android:tag="1"
+            android:text="1"
+            android:textSize="30sp" />
+
+        <!-- rowWeight and columnWeight represents how much space
+         the view allowed to occupy -->
+        <!-- Tag will be used to identify each view -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:layout_row="0"
+            android:onClick="clickButton"
+            android:layout_rowWeight="1"
+            android:textSize="30sp"
+            android:tag="2"
+            android:text="2"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="2"
+            android:layout_columnWeight="1"
+            android:layout_row="0"
+            android:onClick="clickButton"
+            android:textSize="30sp"
+            android:layout_rowWeight="1"
+            android:tag="3"
+            android:text="3"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:layout_row="1"
+            android:textSize="30sp"
+            android:onClick="clickButton"
+            android:layout_rowWeight="1"
+            android:tag="4"
+            android:text="4"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:layout_row="1"
+            android:textSize="30sp"
+            android:onClick="clickButton"
+            android:layout_rowWeight="1"
+            android:tag="5"
+            android:text="5"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="2"
+            android:layout_columnWeight="1"
+            android:layout_row="1"
+            android:textSize="30sp"
+            android:onClick="clickButton"
+            android:layout_rowWeight="1"
+            android:tag="6"
+            android:text="6"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:layout_row="2"
+            android:textSize="30sp"
+            android:onClick="clickButton"
+            android:layout_rowWeight="1"
+            android:tag="7"
+            android:text="7"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:layout_row="2"
+            android:textSize="30sp"
+            android:onClick="clickButton"
+            android:layout_rowWeight="1"
+            android:tag="8"
+            android:text="8"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="2"
+            android:layout_columnWeight="1"
+            android:layout_row="2"
+            android:onClick="clickButton"
+            android:layout_rowWeight="1"
+            android:textSize="30sp"
+            android:tag="9"
+            android:text="9"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:layout_row="3"
+            android:onClick="clickButton"
+            android:textSize="30sp"
+            android:layout_columnSpan="3"
+            android:layout_rowWeight="1"
+            android:tag="0"
+            android:text="0"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonDot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:layout_row="4"
+            android:textSize="30sp"
+            android:layout_rowWeight="1"
+            android:onClick="clickButton"
+            android:tag="10"
+            android:text="."/>
+
+        <!-- columnSpan or rowSpan means how much space they will take
+        over. For example: There will be four columns and the columnSpan
+        for buttonA is 2, so it will cover 2 columns out of four -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonEquals"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:layout_row="4"
+            android:textSize="30sp"
+            android:layout_columnSpan="2"
+            android:layout_rowWeight="1"
+            android:onClick="equals"
+            android:text="="/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="3"
+            android:layout_columnWeight="1"
+            android:layout_row="0"
+            android:textSize="30sp"
+            android:layout_rowWeight="1"
+            android:onClick="delete"
+            android:text="DEL"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonPlus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="3"
+            android:layout_columnWeight="1"
+            android:layout_row="1"
+            android:textSize="30sp"
+            android:layout_rowWeight="1"
+            android:onClick="clickButton"
+            android:tag="11"
+            android:text="+"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonMinus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="3"
+            android:layout_columnWeight="1"
+            android:layout_row="2"
+            android:textSize="30sp"
+            android:layout_rowWeight="1"
+            android:onClick="clickButton"
+            android:tag="12"
+            android:text="-"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonMultiple"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="3"
+            android:layout_columnWeight="1"
+            android:layout_row="3"
+            android:textSize="30sp"
+            android:layout_rowWeight="1"
+            android:onClick="clickButton"
+            android:tag="13"
+            android:text="×"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonDivide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="3"
+            android:layout_columnWeight="1"
+            android:textSize="30sp"
+            android:layout_row="4"
+            android:onClick="clickButton"
+            android:layout_rowWeight="1"
+            android:tag="14"
+            android:text="÷"/>
+
+    </GridLayout>
+
+</RelativeLayout>
