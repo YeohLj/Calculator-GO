@@ -37,6 +37,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Objects;
 
+import static java.lang.Math.floorMod;
 import static java.lang.Math.sqrt;
 import static java.lang.StrictMath.floorDiv;
 
@@ -567,6 +568,8 @@ public class MainActivity extends AppCompatActivity {
             //Modulus
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 if (TAG == 15) {
+
+                    Toast.makeText(this, "This feature is still under testing phase", Toast.LENGTH_SHORT).show();
 
                     if (firstTime) {
 
