@@ -18,8 +18,11 @@ package com.weebly.thetechtube.calculatorgo;
  * Our current website: https://thetechtube.weebly.com/
  */
 
+import android.app.admin.DeviceAdminInfo;
+import android.bluetooth.BluetoothClass;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +38,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.common.util.DeviceProperties;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import java.util.Objects;
 
 import static java.lang.Math.floorMod;
@@ -43,6 +50,7 @@ import static java.lang.StrictMath.floorDiv;
 
 public class MainActivity extends AppCompatActivity {
 
+    private FirebaseAnalytics mFirebaseAnalytics;
     Button button1;
 
     TextView mainTextView;
@@ -94,6 +102,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        mFirebaseAnalytics.setUserProperty("Manufacturer", Build.MANUFACTURER);
+        mFirebaseAnalytics.setUserProperty("Brand", Build.BRAND);
+        mFirebaseAnalytics.setUserProperty("Model", Build.MODEL);
+        mFirebaseAnalytics.setUserProperty("SDK_Version", String.valueOf(Build.VERSION.SDK_INT));
 
         // We will be using findViewById to linked back the original
         // activity_main.xml views
@@ -292,7 +308,15 @@ public class MainActivity extends AppCompatActivity {
 
         Log.i("Info", "TAG = " + TAG);
 
+
         if (TAG < 10) {
+
+            //Log which numbers are been clicked onto Firebase
+            Bundle clickButtonBundle = new Bundle();
+            clickButtonBundle.putString(FirebaseAnalytics.Param.ITEM_ID, String.valueOf(view.getId()));
+            clickButtonBundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Button" + TAG);
+            clickButtonBundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Buttons");
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, clickButtonBundle);
 
             if (firstVal) {
 
@@ -340,6 +364,13 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if (TAG == 11 || TAG == 12 || TAG == 13 || TAG == 14) {
+
+                //Log which operators are been clicked onto Firebase
+                Bundle operatorBundle = new Bundle();
+                operatorBundle.putString(FirebaseAnalytics.Param.ITEM_ID, String.valueOf(view.getId()));
+                operatorBundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Button operator" + TAG);
+                operatorBundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Operators");
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, operatorBundle);
 
                 //Addition
                 if (TAG == 11) {
