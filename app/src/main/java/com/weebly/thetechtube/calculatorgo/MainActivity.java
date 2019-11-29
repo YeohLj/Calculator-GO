@@ -1,7 +1,7 @@
 package com.weebly.thetechtube.calculatorgo;
 
 /*
- * Copyright 2018 The Tech Tube
+ * Copyright 2019 The Tech Tube
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@ package com.weebly.thetechtube.calculatorgo;
  */
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -29,7 +31,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Objects;
+
+import static java.lang.Math.sqrt;
+import static java.lang.StrictMath.floorDiv;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -76,11 +85,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
-        int crazyNumber = 1 + 1;
 
         // We will be using findViewById to linked back the original
         // activity_main.xml views
@@ -104,39 +116,90 @@ public class MainActivity extends AppCompatActivity {
 
     public void equals(View view) {
 
-        //Check for which operator is currently using, calculate
-        //using the operator amd display the final value to the user
-        if (currentOperator.equals("ADDITION")) {
+        try {
 
-            addition();
+            if (!firstTime || !firstVal) {
 
-        } else if (currentOperator.equals("SUBTRACTION")) {
+                performTheSelectedSymbol();
 
-            subtraction();
+            }
 
-        } else if (currentOperator.equals("MULTIPLICATION")) {
+            if (firstTime && firstVal) {
 
-            multiplication();
+                performTheSelectedSymbol();
 
-        } else if (currentOperator.equals("DIVISION")) {
+                //If the first value can be put into an integer than change it
+                //For example: 5.0 or else use double
+                if (Double.parseDouble(firstValue) - (int) Double.parseDouble(firstValue) == 0) {
 
-            division();
+                    mainTextView.setText((int) Double.parseDouble(firstValue) + "");
 
-        }
+                } else {
 
-        firstValue = "";
-        secondValue = "";
-        firstTime = false;
+                    mainTextView.setText(firstValue);
 
-        //If the final value can be put into an integer than change it
-        //For example: 5.0 or else use double
-        if (finalValue - (int) finalValue == 0) {
+                }
 
-            mainTextView.setText((int) finalValue + "");
+            } else {
 
-        } else {
+                //Check for which operator is currently using, calculate
+                //using the operator amd display the final value to the user
+                switch (currentOperator) {
 
-            mainTextView.setText(finalValue + "");
+                    case "ADDITION":
+
+                        addition();
+
+                        break;
+
+                    case "SUBTRACTION":
+
+                        subtraction();
+
+                        break;
+
+                    case "MULTIPLICATION":
+
+                        multiplication();
+
+                        break;
+
+                    case "DIVISION":
+
+                        division();
+
+                        break;
+
+                    case "MODULUS":
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            modulus();
+                        }
+
+                        break;
+                }
+
+                firstValue = "";
+                secondValue = "";
+                firstTime = false;
+
+                //If the final value can be put into an integer than change it
+                //For example: 5.0 or else use double
+                if (finalValue - (int) finalValue == 0) {
+
+                    mainTextView.setText((int) finalValue + "");
+
+                } else {
+
+                    mainTextView.setText(finalValue + "");
+
+                }
+            }
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            Log.i("Exception e Message", Objects.requireNonNull(e.getMessage()));
+            Toast.makeText(this, "Invalid format used", Toast.LENGTH_SHORT).show();
 
         }
     }
@@ -185,6 +248,42 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //When a number is positively valued, change it to negative and vice versa
+    public void changeNumberToPositiveOrNegative(View view) {
+
+        if (firstVal) {
+
+            //If negative sign is present, remove it
+            if (firstValue.indexOf("-") >= 0) {
+
+                firstValue = firstValue.substring(1);
+                mainTextView.setText(firstValue + "");
+
+            } else {
+
+                firstValue = "-" + firstValue;
+                mainTextView.setText(firstValue + "");
+
+            }
+
+        } else {
+
+            if (secondValue.indexOf("-") >= 0) {
+
+                secondValue = secondValue.substring(1);
+                mainTextView.setText(secondValue + "");
+
+            } else {
+
+                secondValue = "-" + secondValue;
+                mainTextView.setText(secondValue + "");
+
+            }
+
+        }
+
+    }
+
     public void clickButton(View view) {
 
         //Get current TAG
@@ -209,241 +308,389 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        //Adding a decimal point
-        // If indexOf(".") returns 0 or more means there is already
-        // a decimal point while if it's a -1, it doesn't have a one
-        if (TAG == 10) {
+        try {
 
-            if (firstVal) {
-
-                //If decimal point is not present, add it
-                if (!(firstValue.indexOf(".") >= 0)) {
-
-                    firstValue += ".";
-                    mainTextView.setText(firstValue + "");
-
-                }
-
-            } else {
-
-                if (!(secondValue.indexOf(".") >= 0)) {
-
-                    secondValue += ".";
-                    mainTextView.setText(secondValue + "");
-
-                }
-
-            }
-
-        }
-
-        //Addition
-        if (TAG == 11) {
-
-            if (firstTime) {
+            //Adding a decimal point
+            // If indexOf(".") returns 0 or more means there is already
+            // a decimal point while if it's a -1, it doesn't have a one
+            if (TAG == 10) {
 
                 if (firstVal) {
 
-                    //If firstValue is not equals to blank
-                    if (!firstValue.equals("")) {
+                    //If decimal point is not present, add it
+                    if (!(firstValue.indexOf(".") >= 0)) {
 
-                        firstVal = false;
+                        firstValue += ".";
+                        mainTextView.setText(firstValue + "");
 
                     }
 
                 } else {
 
-                    if (!secondValue.equals("")) {
+                    if (!(secondValue.indexOf(".") >= 0)) {
+
+                        secondValue += ".";
+                        mainTextView.setText(secondValue + "");
+
+                    }
+
+                }
+
+            }
+
+            if (TAG == 11 || TAG == 12 || TAG == 13 || TAG == 14) {
+
+                //Addition
+                if (TAG == 11) {
+
+                    if (firstTime) {
+
+                        if (firstVal) {
+
+                            //If firstValue is not equals to blank
+                            if (!firstValue.equals("")) {
+
+                                performTheSelectedSymbol();
+                                firstVal = false;
+
+                            }
+
+                        } else {
+
+                            if (!secondValue.equals("")) {
+
+                                performTheSelectedSymbol();
+                                checkForLastOperator();
+
+                                addition();
+                                firstTime = false;
+                                firstValue = "";
+                                secondValue = "";
+                                firstVal = true;
+
+                            }
+                        }
+
+                    } else {
 
                         checkForLastOperator();
 
-                        addition();
-                        firstTime = false;
-                        firstValue = "";
-                        secondValue = "";
-                        firstVal = true;
+                        if (firstVal) {
 
-                    }
-                }
+                            performTheSelectedSymbol();
+                            secondValue = "";
+                            addition();
+                            firstVal = false;
 
-            } else {
+                        } else {
 
-                checkForLastOperator();
+                            performTheSelectedSymbol();
+                            firstValue = "";
+                            addition();
+                            firstVal = true;
 
-                if (firstVal) {
-
-                    secondValue = "";
-                    addition();
-                    firstVal = false;
-
-                } else {
-
-                    firstValue = "";
-                    addition();
-                    firstVal = true;
-
-                }
-            }
-
-            //The addition button will be tapped so the currentOperator
-            //will be ADDITION
-            currentOperator = "ADDITION";
-
-        }
-
-        //Subtraction
-        if (TAG == 12) {
-
-            if (firstTime) {
-
-                if (firstVal) {
-
-                    if (!firstValue.equals("")) {
-
-                        firstVal = false;
-
+                        }
                     }
 
-                } else {
+                    //The addition button will be tapped so the currentOperator
+                    //will be ADDITION
+                    currentOperator = "ADDITION";
 
-                    if (!secondValue.equals("")) {
+                }
+
+                //Subtraction
+                if (TAG == 12) {
+
+                    if (firstTime) {
+
+                        if (firstVal) {
+
+                            if (!firstValue.equals("")) {
+
+                                performTheSelectedSymbol();
+                                firstVal = false;
+
+                            }
+
+                        } else {
+
+                            if (!secondValue.equals("")) {
+
+                                performTheSelectedSymbol();
+                                checkForLastOperator();
+
+                                subtraction();
+                                firstTime = false;
+                                firstValue = "";
+                                secondValue = "";
+                                firstVal = true;
+
+                            }
+                        }
+
+                    } else {
 
                         checkForLastOperator();
 
-                        subtraction();
-                        firstTime = false;
-                        firstValue = "";
-                        secondValue = "";
-                        firstVal = true;
+                        if (firstVal) {
 
-                    }
-                }
+                            performTheSelectedSymbol();
+                            secondValue = "";
+                            subtraction();
+                            firstVal = false;
 
-            } else {
+                        } else {
 
-                checkForLastOperator();
+                            performTheSelectedSymbol();
+                            firstValue = "";
+                            subtraction();
+                            firstVal = true;
 
-                if (firstVal) {
-
-                    secondValue = "";
-                    subtraction();
-                    firstVal = false;
-
-                } else {
-
-                    firstValue = "";
-                    subtraction();
-                    firstVal = true;
-
-                }
-            }
-
-            currentOperator = "SUBTRACTION";
-
-        }
-
-        //Multiplication
-        if (TAG == 13) {
-
-            if (firstTime) {
-
-                if (firstVal) {
-
-                    if (!firstValue.equals("")) {
-
-                        firstVal = false;
-
+                        }
                     }
 
-                } else {
+                    currentOperator = "SUBTRACTION";
 
-                    if (!secondValue.equals("")) {
+                }
+
+                //Multiplication
+                if (TAG == 13) {
+
+                    if (firstTime) {
+
+                        if (firstVal) {
+
+                            if (!firstValue.equals("")) {
+
+                                performTheSelectedSymbol();
+                                firstVal = false;
+
+                            }
+
+                        } else {
+
+                            if (!secondValue.equals("")) {
+
+                                performTheSelectedSymbol();
+                                checkForLastOperator();
+
+                                multiplication();
+                                firstTime = false;
+                                firstValue = "";
+                                secondValue = "";
+                                firstVal = true;
+
+                            }
+                        }
+
+                    } else {
 
                         checkForLastOperator();
 
-                        multiplication();
-                        firstTime = false;
-                        firstValue = "";
-                        secondValue = "";
-                        firstVal = true;
+                        if (firstVal) {
 
-                    }
-                }
+                            performTheSelectedSymbol();
+                            secondValue = "";
+                            multiplication();
+                            firstVal = false;
 
-            } else {
+                        } else {
 
-                checkForLastOperator();
+                            performTheSelectedSymbol();
+                            firstValue = "";
+                            multiplication();
+                            firstVal = true;
 
-                if (firstVal) {
-
-                    secondValue = "";
-                    multiplication();
-                    firstVal = false;
-
-                } else {
-
-                    firstValue = "";
-                    multiplication();
-                    firstVal = true;
-
-                }
-            }
-
-            currentOperator = "MULTIPLICATION";
-
-        }
-
-        //Division
-        if (TAG == 14) {
-
-            if (firstTime) {
-
-                if (firstVal) {
-
-                    if (!firstValue.equals("")) {
-
-                        firstVal = false;
-
+                        }
                     }
 
-                } else {
+                    currentOperator = "MULTIPLICATION";
 
-                    if (!secondValue.equals("")) {
+                }
+
+                //Division
+                if (TAG == 14) {
+
+                    if (firstTime) {
+
+                        if (firstVal) {
+
+                            if (!firstValue.equals("")) {
+
+                                performTheSelectedSymbol();
+                                firstVal = false;
+
+                            }
+
+                        } else {
+
+                            if (!secondValue.equals("")) {
+
+                                performTheSelectedSymbol();
+                                checkForLastOperator();
+
+                                division();
+                                firstTime = false;
+                                firstValue = "";
+                                secondValue = "";
+                                firstVal = true;
+
+                            }
+                        }
+
+                    } else {
 
                         checkForLastOperator();
 
-                        division();
-                        firstTime = false;
-                        firstValue = "";
-                        secondValue = "";
-                        firstVal = true;
+                        if (firstVal) {
 
+                            performTheSelectedSymbol();
+                            secondValue = "";
+                            division();
+                            firstVal = false;
+
+                        } else {
+
+                            performTheSelectedSymbol();
+                            firstValue = "";
+                            division();
+                            firstVal = true;
+
+                        }
                     }
-                }
 
-            } else {
-
-                checkForLastOperator();
-
-                if (firstVal) {
-
-                    secondValue = "";
-                    division();
-                    firstVal = false;
-
-                } else {
-
-                    firstValue = "";
-                    division();
-                    firstVal = true;
+                    currentOperator = "DIVISION";
 
                 }
             }
 
-            currentOperator = "DIVISION";
+            //Modulus
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                if (TAG == 15) {
+
+                    if (firstTime) {
+
+                        if (firstVal) {
+
+                            if (!firstValue.equals("")) {
+
+                                performTheSelectedSymbol();
+                                firstVal = false;
+
+                            }
+
+                        } else {
+
+                            if (!secondValue.equals("")) {
+
+                                performTheSelectedSymbol();
+                                checkForLastOperator();
+
+                                modulus();
+                                firstTime = false;
+                                firstValue = "";
+                                secondValue = "";
+                                firstVal = true;
+
+                            }
+                        }
+
+                    } else {
+
+                        checkForLastOperator();
+
+                        if (firstVal) {
+
+                            performTheSelectedSymbol();
+                            secondValue = "";
+                            modulus();
+                            firstVal = false;
+
+                        } else {
+
+                            performTheSelectedSymbol();
+                            firstValue = "";
+                            modulus();
+                            firstVal = true;
+
+                        }
+                    }
+
+                    currentOperator = "MODULUS";
+
+                }
+            }
+
+            //Square root
+            if (TAG == 16) {
+
+                if (firstVal) {
+
+                    if (!firstValue.startsWith("√")) {
+
+                        //Add the TAG value to the string
+                        firstValue += "√";
+                        //And display it
+                        mainTextView.setText(firstValue + "");
+
+                    }
+
+                } else {
+
+                    if (!secondValue.startsWith("√")) {
+
+                        secondValue += "√";
+                        mainTextView.setText(secondValue + "");
+
+                    }
+                }
+
+            }
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            Log.i("Exception e Message", Objects.requireNonNull(e.getMessage()));
+            Toast.makeText(this, "Invalid format used", Toast.LENGTH_SHORT).show();
 
         }
+    }
 
+    public void performTheSelectedSymbol() {
+
+        if (firstVal) {
+
+            if (firstValue.startsWith("√") && !firstValue.substring(1).equals("")) {
+
+                firstValue = String.valueOf(sqrt(Double.parseDouble(firstValue.substring(1))));
+
+                Log.i("Square root firstvalue", firstValue);
+
+            } else if (firstValue.indexOf("√") > 0 && !firstValue.substring(firstValue.indexOf("√") + 1).equals("")) {
+
+                firstValue = String.valueOf(Double.parseDouble(firstValue.substring(0, firstValue.indexOf("√"))) * sqrt(Double.parseDouble(firstValue.substring(firstValue.indexOf("√") + 1))));
+
+                Log.i("Square root firstvalue", firstValue);
+
+            }
+
+        } else {
+
+            if (secondValue.startsWith("√") && !secondValue.substring(1).equals("")) {
+
+                secondValue = String.valueOf(sqrt(Double.parseDouble(secondValue.substring(1))));
+
+                Log.i("Square root secondvalue", secondValue);
+
+            } else if (secondValue.indexOf("√") > 0 && !secondValue.substring(secondValue.indexOf("√") + 1).equals("")) {
+
+                secondValue = String.valueOf(Double.parseDouble(secondValue.substring(0, secondValue.indexOf("√"))) * sqrt(Double.parseDouble(secondValue.substring(secondValue.indexOf("√") + 1))));
+
+                Log.i("Square root secondvalue", secondValue);
+
+            }
+
+        }
 
     }
 
@@ -617,6 +864,62 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void modulus() {
+
+        //Check if first or second value are blank then add a 0 to it
+        if (!firstTime)  {
+
+            if (firstValue.equals("")) {
+
+                firstValue = "1";
+
+            }
+
+            if (secondValue.equals("")) {
+
+                secondValue = "1";
+
+            }
+
+        }
+
+        try {
+
+            if (firstVal && Double.parseDouble(firstValue) - (int) Double.parseDouble(firstValue) == 0) {
+
+                firstValue = String.valueOf((int) Double.parseDouble(firstValue));
+
+            } else if (!firstVal && Double.parseDouble(secondValue) - (int) Double.parseDouble(secondValue) == 0) {
+
+                secondValue = String.valueOf((int) Double.parseDouble(secondValue));
+
+            }
+
+            if (finalValue == 0 && firstTime) {
+
+                finalValue = floorDiv(Integer.parseInt(firstValue), Integer.parseInt(secondValue));
+
+            } else {
+
+                if (firstVal) {
+                    finalValue = floorDiv((int) finalValue, Integer.parseInt(firstValue));
+                } else {
+                    finalValue = floorDiv((int) finalValue, Integer.parseInt(secondValue));;
+                }
+            }
+
+            firstValue = "";
+            secondValue = "";
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+
+    }
+
     //To check if previously used operator exists
     public void checkForLastOperator() {
 
@@ -640,9 +943,15 @@ public class MainActivity extends AppCompatActivity {
             division();
             Log.i("Info division", String.valueOf(finalValue));
 
+        } else if(currentOperator.equals("MODULUS")) {
+
+            modulus();
+            Log.i("Info modulus", String.valueOf(finalValue));
+
         }
 
     }
+
 
     //BONUS SECTION
 
