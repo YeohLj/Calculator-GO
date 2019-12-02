@@ -187,13 +187,6 @@ public class MainActivity extends AppCompatActivity {
 
                         break;
 
-                    case "MODULUS":
-
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            modulus();
-                        }
-
-                        break;
                 }
 
                 firstValue = "";
@@ -234,7 +227,6 @@ public class MainActivity extends AppCompatActivity {
 
         //BONUS 3
         button1.animate().rotation(360f).setDuration(5000);
-
 
     }
 
@@ -596,63 +588,32 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            //Modulus
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                if (TAG == 15) {
+            //Percentage
+            if (TAG == 15) {
 
-                    Toast.makeText(this, "This feature is still under testing phase", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(this, "This feature is still under testing phase", Toast.LENGTH_SHORT).show();
 
-                    if (firstTime) {
+                    if (firstVal) {
 
-                        if (firstVal) {
+                        if (!firstValue.isEmpty() && !firstValue.contains("%")) {
 
-                            if (!firstValue.equals("")) {
+                            //Add the TAG value to the string
+                            firstValue += "%";
+                            //And display it
+                            mainTextView.setText(firstValue + "");
 
-                                performTheSelectedSymbol();
-                                firstVal = false;
-
-                            }
-
-                        } else {
-
-                            if (!secondValue.equals("")) {
-
-                                performTheSelectedSymbol();
-                                checkForLastOperator();
-
-                                modulus();
-                                firstTime = false;
-                                firstValue = "";
-                                secondValue = "";
-                                firstVal = true;
-
-                            }
                         }
 
                     } else {
 
-                        checkForLastOperator();
+                        if (!secondValue.isEmpty() && !secondValue.contains("%")) {
 
-                        if (firstVal) {
-
-                            performTheSelectedSymbol();
-                            secondValue = "";
-                            modulus();
-                            firstVal = false;
-
-                        } else {
-
-                            performTheSelectedSymbol();
-                            firstValue = "";
-                            modulus();
-                            firstVal = true;
+                            secondValue += "%";
+                            mainTextView.setText(secondValue + "");
 
                         }
                     }
 
-                    currentOperator = "MODULUS";
-
-                }
             }
 
             //Square root
@@ -694,6 +655,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (firstVal) {
 
+            //For Square root
             if (firstValue.startsWith("√") && !firstValue.substring(1).equals("")) {
 
                 firstValue = String.valueOf(sqrt(Double.parseDouble(firstValue.substring(1))));
@@ -705,6 +667,13 @@ public class MainActivity extends AppCompatActivity {
                 firstValue = String.valueOf(Double.parseDouble(firstValue.substring(0, firstValue.indexOf("√"))) * sqrt(Double.parseDouble(firstValue.substring(firstValue.indexOf("√") + 1))));
 
                 Log.i("Square root firstvalue", firstValue);
+
+            }
+
+            //For percentage
+            if (firstValue.endsWith("%")) {
+
+                firstValue = String.valueOf(Double.parseDouble(firstValue.substring(0, firstValue.indexOf("%"))) / 100);
 
             }
 
@@ -723,6 +692,14 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("Square root secondvalue", secondValue);
 
             }
+
+            //For percentage
+            if (secondValue.endsWith("%")) {
+
+                secondValue = String.valueOf(Double.parseDouble(secondValue.substring(0, secondValue.indexOf("%"))) / 100);
+
+            }
+
 
         }
 
@@ -898,62 +875,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public void modulus() {
-
-        //Check if first or second value are blank then add a 0 to it
-        if (!firstTime)  {
-
-            if (firstValue.equals("")) {
-
-                firstValue = "1";
-
-            }
-
-            if (secondValue.equals("")) {
-
-                secondValue = "1";
-
-            }
-
-        }
-
-        try {
-
-            if (firstVal && Double.parseDouble(firstValue) - (int) Double.parseDouble(firstValue) == 0) {
-
-                firstValue = String.valueOf((int) Double.parseDouble(firstValue));
-
-            } else if (!firstVal && Double.parseDouble(secondValue) - (int) Double.parseDouble(secondValue) == 0) {
-
-                secondValue = String.valueOf((int) Double.parseDouble(secondValue));
-
-            }
-
-            if (finalValue == 0 && firstTime) {
-
-                finalValue = floorDiv(Integer.parseInt(firstValue), Integer.parseInt(secondValue));
-
-            } else {
-
-                if (firstVal) {
-                    finalValue = floorDiv((int) finalValue, Integer.parseInt(firstValue));
-                } else {
-                    finalValue = floorDiv((int) finalValue, Integer.parseInt(secondValue));;
-                }
-            }
-
-            firstValue = "";
-            secondValue = "";
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
-        }
-
-    }
-
     //To check if previously used operator exists
     public void checkForLastOperator() {
 
@@ -977,84 +898,69 @@ public class MainActivity extends AppCompatActivity {
             division();
             Log.i("Info division", String.valueOf(finalValue));
 
-        } else if(currentOperator.equals("MODULUS")) {
-
-            modulus();
-            Log.i("Info modulus", String.valueOf(finalValue));
-
         }
 
     }
 
+    //EXTRA FEATURES MAY BE USED FOR FUTURE DEVELOPMENT
 
-    //BONUS SECTION
+    //MODULUS NOT IMPLEENTED
+    /**@RequiresApi(api = Build.VERSION_CODES.N)
+    public void modulus() {
 
-    /** 1. TRY to show a message in the mainTextView when
-     *  a particular button is being long pressed
-     *
-     * STEP 1: Create a new button name at the start of the code,
-     *         we will be linking the button name with the
-     *         activity_main.xml button
-     *
-     *         For example: Button button1;
-     *
-     *         Then, add this line of code to the onCreate method
-     *
-     *         button1 = findViewById(R.id.button1);
-     *
-     * STEP 2: Once completed, we will call button1 long click listener
-     *         to check if there is a long pressed occur for that button
-     *
-     *         Question:  If someone performs a click is called onClickListener
-     *         What will long press be called?
-     *
-     *         Answer: NOTE replace return false to true if exists
-     *         button1.setOnLongClickListener(new View.OnLongClickListener() {
-     *         @Override
-     *         public boolean onLongClick(View view) {
-     *
-     *         mainTextView.setText("Number 1");
-     *         return true;
-     *
-     *            }
-     *         });
-     *
-     * STEP 3: Run your app now on an emulator or a real device to see the results
-     *
-     * Now try doing the same things but for different buttons
-     * */
+    //Check if first or second value are blank then add a 0 to it
+    if (!firstTime)  {
 
-    /** 2. Now try playing with the xml code in activity_main.xml
-     *
-     *     Change and add things like textColor, fontSize, layout_width,
-     *     layout_height and the text itself
-     *
-     *     Samples:
-     *
-     *     - android:textColor="#FFFFFF"
-     *     - android:layout_width="100dp"
-     *     - android:textSize="20sp"
-     *     - android:scaleX="2"
-     *     - android:scaleY="2"
-     */
+    if (firstValue.equals("")) {
 
-    /** 3. Let's try animating the buttons when you press the Clear button
-     *
-     *       Now we are animating button1, rotation 360 means turning it 360 degress
-     *       and the value will be in a float Type and the duration is
-     *       5 seconds. 1s = 1000ms. So now, add this code to your Clear method
-     *
-     *       //It will only run once
-     *       button1.animate().rotation(360f).setDuration(5000);
-     *
-     *       Try setting different commands like alpha and setting other buttons and even TextViews too.
-     *       REMEMBER to link it to the activity_main.xml
-     *
-     */
+    firstValue = "1";
 
-    //Congrats, you just wrote more than 600 lines of code.
-    //Now, it's time to show the world what you had build
-    //Once again, thanks for trying out our Android app course
+    }
+
+    if (secondValue.equals("")) {
+
+    secondValue = "1";
+
+    }
+
+    }
+
+    try {
+
+    if (firstVal && Double.parseDouble(firstValue) - (int) Double.parseDouble(firstValue) == 0) {
+
+    firstValue = String.valueOf((int) Double.parseDouble(firstValue));
+
+    } else if (!firstVal && Double.parseDouble(secondValue) - (int) Double.parseDouble(secondValue) == 0) {
+
+    secondValue = String.valueOf((int) Double.parseDouble(secondValue));
+
+    }
+
+    if (finalValue == 0 && firstTime) {
+
+    finalValue = floorDiv(Integer.parseInt(firstValue), Integer.parseInt(secondValue));
+
+    } else {
+
+    if (firstVal) {
+    finalValue = floorDiv((int) finalValue, Integer.parseInt(firstValue));
+    } else {
+    finalValue = floorDiv((int) finalValue, Integer.parseInt(secondValue));;
+    }
+    }
+
+    firstValue = "";
+    secondValue = "";
+
+    } catch (Exception e) {
+
+    e.printStackTrace();
+
+    }
+
+    }
+     **/
 
 }
 
