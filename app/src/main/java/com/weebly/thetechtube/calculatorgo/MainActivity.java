@@ -44,8 +44,21 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.Objects;
 
+import static java.lang.Math.acos;
+import static java.lang.Math.asin;
+import static java.lang.Math.atan;
+import static java.lang.Math.cbrt;
+import static java.lang.Math.cos;
+import static java.lang.Math.exp;
 import static java.lang.Math.floorMod;
+import static java.lang.Math.log;
+import static java.lang.Math.log10;
+import static java.lang.Math.pow;
+import static java.lang.Math.round;
+import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
+import static java.lang.Math.tan;
+import static java.lang.StrictMath.abs;
 import static java.lang.StrictMath.floorDiv;
 
 public class MainActivity extends AppCompatActivity {
@@ -355,6 +368,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
+            //These are operators 11 = +, 12 = -, 13 = *, 14 = /
             if (TAG == 11 || TAG == 12 || TAG == 13 || TAG == 14) {
 
                 //Log which operators are been clicked onto Firebase
@@ -641,6 +655,71 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
+
+            //ADVANCED FEATURE SECTION
+            //THIS SECTION IS STILL UNDER DEVELOPMENT
+
+            //sin function in degrees
+            sin(100 * Math.PI / 180);
+
+            //sin function in radians
+            sin(0.9);
+
+            //cos function in degrees
+            cos(100 * Math.PI / 180);
+
+            //cos function in radians
+            cos(0.9);
+
+            //tan function in degrees
+            tan(100 * Math.PI / 180);
+
+            //tan function in radians
+            tan(0.9);
+
+            //Inverse sin function in degrees
+            asin(0.5 * Math.PI / 180);
+            Log.i("Add maths", String.valueOf(asin(0.5 * Math.PI / 180)));
+
+            //Inverse sin function in radians
+            asin(0.5);
+
+            //Inverse cos function in degrees
+            acos(0.5 * Math.PI / 180);
+            Log.i("Add maths", String.valueOf(acos(0.5 * Math.PI / 180)));
+
+            //Inverse cos function in radians
+            acos(0.5);
+
+            //Inverse tan function in degrees
+            atan(0.5);
+            Log.i("Add maths", String.valueOf(atan(Math.toRadians(0.5))));
+
+            //Inverse tan function in radians
+            atan(0.5);
+
+            //Exponential function
+            exp(2);
+
+            //ln function (Base e)
+            log(2);
+
+            //log function (Base 10)
+            log10(2);
+
+            //log base something function (Ex: log5 10)
+            //The first ln will include the normal value
+            //And the second ln will include the base value
+            Log.i("Add maths", String.valueOf(log(10) / log(5)));
+
+            //Power function, value x power value y
+            pow(5, 2);
+
+            //Cuber root function
+            cbrt(64);
+
+            //nth root function 125 = value, 3 = nth root
+            pow(125, 1.0 / 3);
 
         } catch (Exception e) {
 
