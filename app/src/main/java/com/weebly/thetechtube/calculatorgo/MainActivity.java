@@ -678,22 +678,19 @@ public class MainActivity extends AppCompatActivity {
             tan(0.9);
 
             //Inverse sin function in degrees
-            asin(0.5 * Math.PI / 180);
-            Log.i("Add maths", String.valueOf(asin(0.5 * Math.PI / 180)));
+            Math.toDegrees(asin(0.5));
 
             //Inverse sin function in radians
             asin(0.5);
 
             //Inverse cos function in degrees
-            acos(0.5 * Math.PI / 180);
-            Log.i("Add maths", String.valueOf(acos(0.5 * Math.PI / 180)));
+            Math.toDegrees(acos(0.5));
 
             //Inverse cos function in radians
             acos(0.5);
 
             //Inverse tan function in degrees
-            atan(0.5);
-            Log.i("Add maths", String.valueOf(atan(Math.toRadians(0.5))));
+            Math.toDegrees(atan(0.5));
 
             //Inverse tan function in radians
             atan(0.5);
